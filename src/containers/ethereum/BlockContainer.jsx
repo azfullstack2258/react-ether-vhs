@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import Transaction from '../../components/Transaction';
 import { loadTransactions } from '../../reducer/ethereum';
 import { selectedBlockSelector } from '../../selectors';
 
@@ -20,7 +21,9 @@ const BlockContainer = ({
     <>
       <div>Block {block.number}</div>
       {proceeding && <p>Loading...</p>}
-      {!proceeding && <p>{transactions.length}</p>}
+      {!proceeding &&
+          transactions.map((tx, id) => <Transaction key={id} data={tx} />)
+      }
     </>
   )
 };
