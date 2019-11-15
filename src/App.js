@@ -6,7 +6,8 @@ import { PersistGate } from 'redux-persist/lib/integration/react'
 
 import LatestBlocks from './containers/ethereum/LatestBlocks';
 import BlockContainer from './containers/ethereum/BlockContainer';
-import store, { history, persistor } from './store'
+import store, { history, persistor } from './store';
+import 'antd/dist/antd.css';
 import './App.css';
 
 class App extends Component {
