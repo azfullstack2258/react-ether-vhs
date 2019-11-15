@@ -36,6 +36,15 @@ export class Web3 {
 
     // await batch.execute();
 
-    return blocks;
+    return blocks.reverse();
+  }
+
+  getTxFromBlock = async (number, id) => {
+    const transaction = await this.web3.eth.getTransactionFromBlock(number, id);
+    return transaction;
+  }
+
+  getTx = async txHash => {
+    return await this.web3.eth.getTransaction(txHash);
   }
 }
