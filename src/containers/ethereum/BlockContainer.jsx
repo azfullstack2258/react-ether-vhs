@@ -5,8 +5,9 @@ import { Table, Typography } from 'antd';
 import styled from 'styled-components';
 
 import PageWrapper from '../../components/PageWrapper';
+import SearchBar from './TxSearchBar';
 import { loadTransactions } from '../../reducer/ethereum';
-import { selectedBlockSelector } from '../../selectors';
+import { selectedBlockSelector, getFilteredTransactions } from '../../selectors';
 
 const Info = styled.div`
   text-align: left;
@@ -50,13 +51,15 @@ const BlockContainer = ({
       render: val => <span>{`${val / Math.pow(10, 18)} Ether`}</span>,
       width: 100
     }
-  ]
+  ];
+
   return (
     <PageWrapper title="Transactions Information">
       <Info>
         <h1>Transactions</h1>
         <Typography>For Block {block.number}</Typography>
       </Info>
+      <SearchBar />
       <Table rowKey="hash" dataSource={transactions} loading={proceeding} columns={columns} />
     </PageWrapper>
   )
@@ -65,10 +68,12 @@ const BlockContainer = ({
 const mapStateToProps = state => ({
   block: selectedBlockSelector(state),
   proceeding: state.ethereum.proceeding,
-  transactions: state.ethereum.transactions
+  transactions: getFilteredTransactions(state)
 });
 
-const mapDispatchToProps = { loadTransactions };
+const mapDispatchToProps = {
+  loadTransactions,
+};
 
 BlockContainer.propTypes = {
   block: PropTypes.object.isRequired,
