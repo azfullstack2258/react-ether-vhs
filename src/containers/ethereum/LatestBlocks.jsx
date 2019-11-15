@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { isEmpty } from 'lodash';
 
+import Block from '../../components/Block';
 import { loadBlocks } from '../../reducer/ethereum';
 
 class LatestBlocks extends Component {
@@ -10,11 +12,21 @@ class LatestBlocks extends Component {
   }
 
   render() {
-    // const { proceeding, blocks } = this.props;
+    const { proceeding, blocks } = this.props;
 
     return (
       <div>
         <p>The latest blocks</p>
+        {proceeding && (
+          <span>Loading...</span>
+        )}
+        {!proceeding
+          && !isEmpty(blocks)
+          && blocks.map(
+            (block, id) => (
+              <Block key={id} data={block} />
+            )
+          )}
       </div>
     )
   }
