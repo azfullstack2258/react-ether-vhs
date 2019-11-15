@@ -22,7 +22,9 @@ export function* loadTransactionsSaga() {
   const txs = [];
   for (let i = 0; i < selectedBlock.transactions.length; i ++) {
     const res = yield call(web3.getTxFromBlock, selectedBlock.number, i);
-    txs.push(res);
+    if (res.to){
+      txs.push(res);
+    }
   }
 
   yield put({ type: ethereumActions.setTransactions, payload: txs });
