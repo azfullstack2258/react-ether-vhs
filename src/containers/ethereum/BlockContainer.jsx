@@ -1,10 +1,17 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Table, Typography } from 'antd';
+import styled from 'styled-components';
 
-import Transaction from '../../components/Transaction';
+import PageWrapper from '../../components/PageWrapper';
 import { loadTransactions } from '../../reducer/ethereum';
 import { selectedBlockSelector } from '../../selectors';
+
+const Info = styled.div`
+  text-align: left;
+  margin-bottom: 16px;
+`;
 
 const BlockContainer = ({
   block,
@@ -17,14 +24,41 @@ const BlockContainer = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [block.number]);
 
+  const columns = [
+    {
+      title: 'Txn Hash',
+      dataIndex: 'hash',
+      key: 'hash',
+      ellipsis: true
+    },
+    {
+      title: 'From',
+      dataIndex: 'from',
+      key: 'from',
+      ellipsis: true
+    },
+    {
+      title: 'To',
+      dataIndex: 'to',
+      key: 'to',
+      ellipsis: true
+    },
+    {
+      title: 'Value',
+      dataIndex: 'value',
+      key: 'value',
+      render: val => <span>{`${val / Math.pow(10, 18)} Ether`}</span>,
+      width: 100
+    }
+  ]
   return (
-    <>
-      <div>Block {block.number}</div>
-      {proceeding && <p>Loading...</p>}
-      {!proceeding &&
-          transactions.map((tx, id) => <Transaction key={id} data={tx} />)
-      }
-    </>
+    <PageWrapper title="Transactions Information">
+      <Info>
+        <h1>Transactions</h1>
+        <Typography>For Block {block.number}</Typography>
+      </Info>
+      <Table rowKey="hash" dataSource={transactions} loading={proceeding} columns={columns} />
+    </PageWrapper>
   )
 };
 

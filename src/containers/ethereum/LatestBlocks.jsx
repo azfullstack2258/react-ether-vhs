@@ -2,25 +2,38 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { Table, Layout, Card } from 'antd';
+import { Table, Button } from 'antd';
 import styled from 'styled-components';
 
+import PageWrapper from '../../components/PageWrapper';
 import { loadBlocks, selectBlock } from '../../reducer/ethereum';
 
-const { Header, Content } = Layout;
-
-const CustomHeader = styled(Header)`
-  color: white;
+const BlockLink = styled.div`
+  color: #1890ff;
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
 `;
+
 class LatestBlocks extends Component {
   componentDidMount() {
-    this.props.loadBlocks();
+    this.onLoad();
   }
 
-  handleSelectBlock = id => {
+  onLoad = () => {
+    this.props.loadBlocks();
+  };
+
+  handleSelectBlock = number => {
     const { blocks } = this.props;
-    this.props.selectBlock(id);
-    this.props.history.push(`/block/${blocks[id].number}`);
+    for (let i = 0; i < 10; i ++) {
+      if (blocks[i].number === number) {
+        this.props.selectBlock(i);
+        this.props.history.push(`/block/${blocks[i].number}`);
+        break;
+      }
+    }
   };
 
   render() {
@@ -30,7 +43,7 @@ class LatestBlocks extends Component {
         title: 'Number',
         dataIndex: 'number',
         key: 'number',
-        render: text => <div>{ text }</div>
+        render: number => <BlockLink onClick={() => this.handleSelectBlock(number)}>{ number }</BlockLink>
       },
       {
         title: 'Tx Count',
@@ -51,20 +64,13 @@ class LatestBlocks extends Component {
     ];
 
     return (
-      <div>
-        <Layout>
-          <CustomHeader>The latest 10 blocks</CustomHeader>
-          <Content>
-            <Card>
-              {proceeding && (
-                <span>Loading...</span>
-              )}
-              {!proceeding && (<Table columns={columns} dataSource={blocks} />)}
-            </Card>
-          </Content>
-        </Layout>
-      </div>
-    )
+      <PageWrapper title="The latest 10 blocks">
+        <div style={{ marginBottom: 16 }}>
+          <Button type="primayr" onClick={this.onLoad} disabled={proceeding} loading={proceeding}>Refresh</Button>
+        </div>
+        <Table rowKey="number" columns={columns} dataSource={blocks} loading={proceeding} />
+      </PageWrapper>
+    );
   }
 }
 
