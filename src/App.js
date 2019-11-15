@@ -5,6 +5,7 @@ import { ConnectedRouter } from 'connected-react-router';
 import { PersistGate } from 'redux-persist/lib/integration/react'
 
 import LatestBlocks from './containers/ethereum/LatestBlocks';
+import BlockContainer from './containers/ethereum/BlockContainer';
 import store, { history, persistor } from './store'
 import './App.css';
 
@@ -19,7 +20,8 @@ class App extends Component {
           >
             <ConnectedRouter history={history}>
               <Switch>
-                <Route exact path='/' component={LatestBlocks}/>
+                <Route exact path='/' component={LatestBlocks} />
+                <Route path='/block/:id' component={BlockContainer} />
               </Switch>
             </ConnectedRouter>
           </PersistGate>

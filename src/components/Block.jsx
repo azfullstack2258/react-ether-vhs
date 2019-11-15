@@ -1,14 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router';
 
-const Block = ({ data }) => (
+const Block = ({ data, onSelect }) => (
   <div>
-    <a href={`/block/${data.number}`}>{ data.number }</a>
+    <div onClick={onSelect}>{ data.number }</div>
   </div>
 );
 
 Block.propTypes = {
   data: PropTypes.object.isRequired,
+  onSelect: PropTypes.func.isRequired,
 };
 
-export default Block;
+export default withRouter(Block);

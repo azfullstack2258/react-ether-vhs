@@ -4,12 +4,18 @@ import { connect } from 'react-redux';
 import { isEmpty } from 'lodash';
 
 import Block from '../../components/Block';
-import { loadBlocks } from '../../reducer/ethereum';
+import { loadBlocks, selectBlock } from '../../reducer/ethereum';
 
 class LatestBlocks extends Component {
   componentDidMount() {
     this.props.loadBlocks();
   }
+
+  handleSelectBlock = id => {
+    const { blocks } = this.props;
+    this.props.selectBlock(id);
+    this.props.history.push(`/block/${blocks[id].number}`);
+  };
 
   render() {
     const { proceeding, blocks } = this.props;
@@ -24,7 +30,7 @@ class LatestBlocks extends Component {
           && !isEmpty(blocks)
           && blocks.map(
             (block, id) => (
-              <Block key={id} data={block} />
+              <Block key={id} data={block} onSelect={() => this.handleSelectBlock(id)} />
             )
           )}
       </div>
@@ -37,7 +43,10 @@ const mapStateToProps = state => ({
   blocks: state.ethereum.blocks
 });
 
-const mapDispatchToProps = { loadBlocks };
+const mapDispatchToProps = {
+  loadBlocks,
+  selectBlock
+};
 
 LatestBlocks.protoTypes = {
   history: PropTypes.object.isRequired,
