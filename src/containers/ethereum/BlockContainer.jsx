@@ -49,7 +49,7 @@ const BlockContainer = ({
       dataIndex: 'value',
       key: 'value',
       render: val => <span>{`${val / Math.pow(10, 18)} Ether`}</span>,
-      width: 100
+      width: 200
     }
   ];
 

@@ -1,12 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Input, Button } from 'antd';
+import { Input, Button, Select } from 'antd';
 import styled from 'styled-components';
 
 import { setQueryFrom, setQueryTo, setQueryValue, clearFilter } from '../../reducer/search';
+import { getAvailableValues } from '../../selectors';
 
 const { Search } = Input;
+const { Option } = Select;
 
 const FilterBar = styled.div`
   text-align: left;
@@ -16,6 +18,7 @@ const TxSearchBar = ({
   from,
   to,
   value,
+  values,
   setQueryFrom,
   setQueryTo,
   setQueryValue,
@@ -28,9 +31,6 @@ const TxSearchBar = ({
         break;
       case 'to':
         setQueryTo(e.target.value);
-        break;
-      case 'value':
-        setQueryValue(e.target.value);
         break;
       default:
         break;
@@ -53,6 +53,15 @@ const TxSearchBar = ({
         onChange={handleChange('to')}
         style={{width: 200, marginRight: 20}}
       />
+      <Select
+        size="default"
+        value={value}
+        onChange={v => setQueryValue(v)}
+        style={{width: 200, marginRight: 20}}
+      >
+        <Option value={null}>All</Option>
+        {values.map((v, id) => <Option key={id} value={v}>{`${v} Ether`}</Option>)}
+      </Select>
       <Button type="primary" onClick={clearFilter}>Clear Filter</Button>
     </FilterBar>
   );
@@ -61,7 +70,8 @@ const TxSearchBar = ({
 const mapStateToProps = state => ({
   from: state.search.from,
   to: state.search.to,
-  value: state.search.value
+  value: state.search.value,
+  values: getAvailableValues(state)
 });
 
 const mapDispatchToProps = {
@@ -75,6 +85,7 @@ TxSearchBar.propTypes = {
   from: PropTypes.string,
   to: PropTypes.string,
   value: PropTypes.number,
+  values: PropTypes.arrayOf(PropTypes.number),
   setQueryFrom: PropTypes.func.isRequired,
   setQueryTo: PropTypes.func.isRequired,
   setQueryValue: PropTypes.func.isRequired,
@@ -84,7 +95,8 @@ TxSearchBar.propTypes = {
 TxSearchBar.defaultProps = {
   from: '',
   to: '',
-  value: null
+  value: null,
+  values: []
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TxSearchBar);
