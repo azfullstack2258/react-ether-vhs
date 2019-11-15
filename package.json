@@ -6,6 +6,7 @@
     "antd": "^3.25.1",
     "connected-react-router": "^6.5.2",
     "history": "^4.10.1",
+    "moment": "^2.24.0",
     "prop-types": "^15.7.2",
     "range": "^0.0.3",
     "react": "^16.10.1",

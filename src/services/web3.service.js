@@ -12,7 +12,6 @@ export class Web3 {
 
   getLatestBlocks = async () => {
     const latest = await this.web3.eth.getBlockNumber();
-    console.log('LATEST', latest)
     const blockNumbers = range(latest - 9, latest + 1, 1);
     // const batch = new this.web3.eth.BatchRequest();
     const blocks = [];
@@ -20,7 +19,6 @@ export class Web3 {
     const storeBlock = (obj) => {
       localStorage.setItem('block', JSON.stringify(obj));
       blocks.push(obj);
-      console.log('<<<', blocks)
     };
 
     for (let i of blockNumbers) {
