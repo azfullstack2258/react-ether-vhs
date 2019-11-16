@@ -17,7 +17,6 @@ export class Web3 {
     const blocks = [];
 
     const storeBlock = (obj) => {
-      localStorage.setItem('block', JSON.stringify(obj));
       blocks.push(obj);
     };
 
