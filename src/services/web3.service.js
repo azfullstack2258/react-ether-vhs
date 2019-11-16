@@ -17,7 +17,9 @@ export class Web3 {
     const blocks = [];
 
     const storeBlock = (_, obj) => {
-      blocks.push(obj);
+      if (obj) {
+        blocks.push(obj);
+      }
       if (blocks.length === 10) {
         cb(blocks.reverse());
       }
@@ -37,7 +39,6 @@ export class Web3 {
     const transactions = [];
 
     const storeTransaction = (_, obj) => {
-      transactions.push(obj);
       if (transactions.length === block.transactions.length) {
         cb(transactions);
       }

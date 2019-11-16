@@ -11,13 +11,14 @@ export const actions = {
   initiate: 'ethereum/INITIATE'
 };
 
-export const loadBlocks = createAction(actions.loadBlocks);
-export const loadTransactions = createAction(actions.loadTransactions);
 export const selectBlock = createAction(actions.selectBlock);
+export const setBlocks = createAction(actions.setBlocks);
+export const setProceedingStatus = createAction(actions.setProceedingStatus);
+export const setTransactions = createAction(actions.setTransactions);
 
 const defaultState = {
   blocks: [],
-  selectedBlockId: null,
+  selectedBlock: null,
   transactions: [],
   proceeding: false
 };
@@ -25,7 +26,7 @@ const defaultState = {
 export default handleActions({
   [actions.initiate]: () => defaultState,
   [actions.setProceedingStatus]: (state, action) => ({ ...state, proceeding: action.payload }),
-  [actions.setBlocks]: (state, action) => ({ ...state, blocks: action.payload }),
-  [actions.selectBlock]: (state, action) => ({ ...state, selectedBlockId: action.payload }),
-  [actions.setTransactions]: (state, action) => ({ ...state, transactions: action.payload })
+  [actions.setBlocks]: (state, action) => ({ ...state, blocks: action.payload, proceeding: false }),
+  [actions.selectBlock]: (state, action) => ({ ...state, selectedBlock: action.payload }),
+  [actions.setTransactions]: (state, action) => ({ ...state, transactions: action.payload, proceeding: false })
 }, defaultState);
