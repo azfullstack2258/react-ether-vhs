@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { Table, Typography } from 'antd';
 import styled from 'styled-components';
@@ -17,13 +18,18 @@ const Info = styled.div`
 const BlockContainer = ({
   block,
   proceeding,
+  history,
   transactions,
   loadTransactions
 }) => {
+  if (!block) {
+    history.push('/');
+  }
+
   useEffect(() => {
     loadTransactions()
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [block.number]);
+  }, [block]);
 
   const columns = [
     {
@@ -57,7 +63,7 @@ const BlockContainer = ({
     <PageWrapper title="Transactions Information">
       <Info>
         <h1>Transactions</h1>
-        <Typography>For Block {block.number}</Typography>
+        <Typography>For Block {block && block.number}</Typography>
       </Info>
       <SearchBar />
       <Table rowKey="hash" dataSource={transactions} loading={proceeding} columns={columns} />
@@ -80,10 +86,11 @@ BlockContainer.propTypes = {
   proceeding: PropTypes.bool.isRequired,
   transactions: PropTypes.arrayOf(PropTypes.object),
   loadTransactions: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired
 };
 
 BlockContainer.defaultProps = {
   transactions: []
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(BlockContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter((BlockContainer)));
