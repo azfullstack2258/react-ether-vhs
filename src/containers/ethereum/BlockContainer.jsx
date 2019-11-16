@@ -7,8 +7,9 @@ import styled from 'styled-components';
 
 import PageWrapper from '../../components/PageWrapper';
 import SearchBar from './TxSearchBar';
-import { loadTransactions } from '../../reducer/ethereum';
+import { setTransactions, setProceedingStatus } from '../../reducer/ethereum';
 import { selectedBlockSelector, getFilteredTransactions } from '../../selectors';
+import { Web3 } from '../../services/web3.service';
 
 const Info = styled.div`
   text-align: left;
@@ -20,14 +21,24 @@ const BlockContainer = ({
   proceeding,
   history,
   transactions,
-  loadTransactions
+  setTransactions,
+  setProceedingStatus
 }) => {
   if (!block) {
     history.push('/');
   }
 
+  const web3 = new Web3();
   useEffect(() => {
-    loadTransactions()
+    async function fetchTxns() {
+      setProceedingStatus(true);
+      web3.getTxnsFromBlock(
+        block,
+        data => setTransactions(data)
+      );
+    }
+
+    fetchTxns();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [block]);
 
@@ -78,14 +89,16 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  loadTransactions,
+  setTransactions,
+  setProceedingStatus
 };
 
 BlockContainer.propTypes = {
   block: PropTypes.object.isRequired,
   proceeding: PropTypes.bool.isRequired,
   transactions: PropTypes.arrayOf(PropTypes.object),
-  loadTransactions: PropTypes.func.isRequired,
+  setTransactions: PropTypes.func.isRequired,
+  setProceedingStatus: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired
 };
 
