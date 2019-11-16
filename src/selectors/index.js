@@ -11,8 +11,9 @@ export const getFilteredTransactions = createSelector(
     const { from, to, value } = keywords;
     return (!isEmpty(transactions) && transactions.filter(
       tx => (
-        tx.from.toLowerCase().includes(from.toLowerCase()) &&
-        tx.to.toLowerCase().includes(to.toLowerCase()) &&
+        tx &&
+        tx.from && tx.from.toLowerCase().includes(from.toLowerCase()) &&
+        tx.to && tx.to.toLowerCase().includes(to.toLowerCase()) &&
         (value === null || parseFloat(tx.value, 10) === value * Math.pow(10, 18))
       )
     )) || [];
@@ -25,7 +26,7 @@ export const getAvailableValues = createSelector(
     let values = [];
 
     !isEmpty(transactions) && transactions.forEach(tx => {
-      const value = tx.value / Math.pow(10, 18);
+      const value = tx && tx.value / Math.pow(10, 18);
       if (values.indexOf(value) < 0) {
         values.push(value);
       }

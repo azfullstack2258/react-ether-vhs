@@ -43,7 +43,6 @@ class LatestBlocks extends Component {
 
   render() {
     const { proceeding, blocks } = this.props;
-    console.log(blocks)
     const columns = [
       {
         title: 'Number',
