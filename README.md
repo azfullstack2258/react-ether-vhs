@@ -13,6 +13,13 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 - [Web3.js v1.2.2](https://web3js.readthedocs.io/en/v1.2.2/)
   * In order to reduce the amount of network request web3, it used [BatchRequests](https://web3js.readthedocs.io/en/v1.2.2/web3-eth.html#batchrequest)
 - [INFURA - Ethereum & IPFS APIs](https://infura.io)
+- [Redux](https://redux.js.org/) for state management
+- [Redux Persist](https://github.com/rt2zz/redux-persist) to persist redux store state
+- [Redux-Saga](https://redux-saga.js.org/)
+- [Styled Components](https://www.styled-components.com/)
+- [Ant Design](https://ant.design) as UI framework
+
+  ...
 
 ## Available Scripts
 
