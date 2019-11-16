@@ -39,14 +39,15 @@ export class Web3 {
     const transactions = [];
 
     const storeTransaction = (_, obj) => {
+      transactions.push(obj);
       if (transactions.length === block.transactions.length) {
         cb(transactions);
       }
     };
 
-    block.transactions.forEach(tx => {
+    block.transactions.forEach((_, id) => {
       batch.add(
-        this.web3.eth.getTransaction.request(tx.hash, storeTransaction)
+        this.web3.eth.getTransactionFromBlock.request(block.number, id, storeTransaction)
       );
     });
 
