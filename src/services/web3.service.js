@@ -10,30 +10,46 @@ export class Web3 {
     this.web3 = new Web3L(new Web3L.providers.HttpProvider(url));
   }
 
-  getLatestBlocks = async () => {
+  getLatestBlocks = async cb => {
     const latest = await this.web3.eth.getBlockNumber();
     const blockNumbers = range(latest - 9, latest + 1, 1);
-    // const batch = new this.web3.eth.BatchRequest();
+    const batch = new this.web3.eth.BatchRequest();
     const blocks = [];
 
-    const storeBlock = (obj) => {
+    const storeBlock = (_, obj) => {
       blocks.push(obj);
+      if (blocks.length === 10) {
+        cb(blocks.reverse());
+      }
     };
 
-    for (let i of blockNumbers) {
-      // await this.web3.eth.getBlock(i, storeBlock)
-      await this.web3.eth.getBlock(i).then(storeBlock);
-    }
+    blockNumbers.forEach(blockNumber => {
+      batch.add(
+        this.web3.eth.getBlock.request(blockNumber, storeBlock)
+      );
+    });
 
-    // blockNumbers.forEach(blockNumber => {
-    //   batch.add(
-    //     this.web3.eth.getBlock.request(blockNumber, storeBlock)
-    //   );
-    // });
+    batch.execute();
+  }
 
-    // await batch.execute();
+  getTxnsFromBlock = async (block, cb) => {
+    const batch = new this.web3.eth.BatchRequest();
+    const transactions = [];
 
-    return blocks.reverse();
+    const storeTransaction = (_, obj) => {
+      transactions.push(obj);
+      if (transactions.length === block.transactions.length) {
+        cb(transactions);
+      }
+    };
+
+    block.transactions.forEach(tx => {
+      batch.add(
+        this.web3.eth.getTransaction.request(tx.hash, storeTransaction)
+      );
+    });
+
+    batch.execute();
   }
 
   getTxFromBlock = async (number, id) => {
