@@ -70,7 +70,7 @@ class LatestBlocks extends Component {
 
     return (
       <PageWrapper title="The latest 10 blocks">
-        <div style={{ marginBottom: 16 }}>
+        <div style={{ marginBottom: 16, textAlign: 'right' }}>
           <Button type="primayr" onClick={this.onLoad} disabled={proceeding} loading={proceeding}>Refresh</Button>
         </div>
         <Table rowKey="number" columns={columns} dataSource={blocks} loading={proceeding} />
