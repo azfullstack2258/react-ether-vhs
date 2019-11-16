@@ -9,6 +9,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 * In `src/config.js` file, replace environment variables with your own. e.g. `INFURA_KEY`
 
+## Libraries & Services
+- [Web3.js v1.2.2](https://web3js.readthedocs.io/en/v1.2.2/)
+  * In order to reduce the amount of network request web3, it used [BatchRequests](https://web3js.readthedocs.io/en/v1.2.2/web3-eth.html#batchrequest)
+- [INFURA - Ethereum & IPFS APIs](https://infura.io)
 
 ## Available Scripts
 
