@@ -6,7 +6,8 @@ import { Table, Button } from 'antd';
 import styled from 'styled-components';
 
 import PageWrapper from '../../components/PageWrapper';
-import { loadBlocks, selectBlock } from '../../reducer/ethereum';
+import { setBlocks, selectBlock, setProceedingStatus } from '../../reducer/ethereum';
+import { Web3 } from '../../services/web3.service';
 
 const BlockLink = styled.div`
   color: #1890ff;
@@ -18,18 +19,22 @@ const BlockLink = styled.div`
 
 class LatestBlocks extends Component {
   componentDidMount() {
+    this.web3 = new Web3();
     this.onLoad();
   }
 
   onLoad = () => {
-    this.props.loadBlocks();
+    this.props.setProceedingStatus(true);
+    this.web3.getLatestBlocks(
+      data => this.props.setBlocks(data)
+    );
   };
 
   handleSelectBlock = number => {
     const { blocks } = this.props;
     for (let i = 0; i < 10; i ++) {
       if (blocks[i].number === number) {
-        this.props.selectBlock(i);
+        this.props.selectBlock(blocks[i]);
         this.props.history.push(`/block/${blocks[i].number}`);
         break;
       }
@@ -38,6 +43,7 @@ class LatestBlocks extends Component {
 
   render() {
     const { proceeding, blocks } = this.props;
+    console.log(blocks)
     const columns = [
       {
         title: 'Number',
@@ -80,14 +86,18 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  loadBlocks,
-  selectBlock
+  setBlocks,
+  selectBlock,
+  setProceedingStatus
 };
 
 LatestBlocks.protoTypes = {
   history: PropTypes.object.isRequired,
   blocks: PropTypes.arrayOf(PropTypes.object).isRequired,
-  proceeding: PropTypes.bool.isRequired
+  proceeding: PropTypes.bool.isRequired,
+  setBlocks: PropTypes.func.isRequired,
+  selectBlock: PropTypes.func.isRequired,
+  setProceedingStatus: PropTypes.func.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LatestBlocks);
